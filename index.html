@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Медиатека — Фильмы, Комиксы, Книги</title>
+  <style>
+    body { font-family: Arial, sans-serif; margin: 0; background: #f9f9f9; }
+    header { background: #1e1e1e; color: white; padding: 20px; text-align: center; }
+    nav { background: #333; display: flex; justify-content: center; gap: 30px; padding: 10px 0; }
+    nav a { color: white; text-decoration: none; font-weight: bold; }
+    .container { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 20px; padding: 20px; }
+    .item { background: white; padding: 10px; border-radius: 10px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); }
+    .item img { width: 100%; border-radius: 10px; }
+    .ads { margin: 20px; text-align: center; }
+    footer { background: #222; color: white; padding: 10px; text-align: center; font-size: 0.9em; }
+  </style>
+  <script>
+    document.addEventListener('contextmenu', e => e.preventDefault()); // Отключить правый клик
+  </script>
+</head>
+<body>
+  <header>
+    <h1>📚 Медиатека: фильмы, комиксы, книги</h1>
+  </header>
+  <nav>
+    <a href="#">Фильмы</a>
+    <a href="#">Комиксы</a>
+    <a href="#">Книги</a>
+  </nav>
+  <div class="ads">
+    <!-- Место для рекламы -->
+    <img src="https://via.placeholder.com/728x90?text=Реклама+тут" alt="Реклама" />
+  </div>
+  <div class="container">
+    <div class="item">
+      <img src="https://via.placeholder.com/200x300?text=Фильм+1" alt="Фильм 1" />
+      <p><strong>Фильм 1</strong><br /><a href="#">Смотреть</a></p>
+    </div>
+    <div class="item">
+      <img src="https://via.placeholder.com/200x300?text=Комикс+1" alt="Комикс 1" />
+      <p><strong>Комикс 1</strong><br /><a href="#">Читать</a></p>
+    </div>
+    <div class="item">
+      <img src="https://via.placeholder.com/200x300?text=Книга+1" alt="Книга 1" />
+      <p><strong>Книга 1</strong><br /><a href="#">Читать</a></p>
+    </div>
+  </div>
+  <footer>
+    &copy; 2025 Медиатека. Контент добавляется для ознакомления. Все права принадлежат владельцам.
+  </footer>
+</body>
+</html>
