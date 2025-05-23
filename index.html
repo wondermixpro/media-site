@@ -3,51 +3,271 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Медиатека — Фильмы, Комиксы, Книги</title>
+  <title>Медиатека: Фильмы, Комиксы, Книги</title>
   <style>
-    body { font-family: Arial, sans-serif; margin: 0; background: #f9f9f9; }
-    header { background: #1e1e1e; color: white; padding: 20px; text-align: center; }
-    nav { background: #333; display: flex; justify-content: center; gap: 30px; padding: 10px 0; }
-    nav a { color: white; text-decoration: none; font-weight: bold; }
-    .container { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 20px; padding: 20px; }
-    .item { background: white; padding: 10px; border-radius: 10px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); }
-    .item img { width: 100%; border-radius: 10px; }
-    .ads { margin: 20px; text-align: center; }
-    footer { background: #222; color: white; padding: 10px; text-align: center; font-size: 0.9em; }
+    /* Сброс и базовые стили */
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: #f5f7fa;
+      color: #333;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+    header {
+      background: #2c3e50;
+      color: white;
+      padding: 25px 20px;
+      text-align: center;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.3);
+    }
+    header h1 {
+      font-weight: 700;
+      font-size: 2rem;
+      letter-spacing: 1px;
+    }
+    nav {
+      display: flex;
+      justify-content: center;
+      background: #34495e;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+    }
+    nav a {
+      color: #ecf0f1;
+      text-decoration: none;
+      padding: 15px 30px;
+      font-weight: 600;
+      transition: background 0.3s, color 0.3s;
+      border-bottom: 3px solid transparent;
+    }
+    nav a:hover,
+    nav a.active {
+      background: #1abc9c;
+      color: white;
+      border-bottom: 3px solid #16a085;
+    }
+
+    main {
+      flex-grow: 1;
+      padding: 30px 20px;
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+    .section-title {
+      font-size: 1.6rem;
+      margin-bottom: 20px;
+      color: #2c3e50;
+      border-left: 6px solid #1abc9c;
+      padding-left: 10px;
+    }
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 20px;
+    }
+    .card {
+      background: white;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      transition: transform 0.3s ease;
+    }
+    .card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 10px 20px rgba(0,0,0,0.15);
+    }
+    .card img {
+      width: 100%;
+      height: 270px;
+      object-fit: cover;
+    }
+    .card-content {
+      padding: 15px;
+      flex-grow: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+    .card-content h3 {
+      font-size: 1.1rem;
+      margin-bottom: 10px;
+      color: #34495e;
+    }
+    .card-content a {
+      align-self: flex-start;
+      padding: 8px 14px;
+      background: #1abc9c;
+      color: white;
+      text-decoration: none;
+      border-radius: 6px;
+      font-weight: 600;
+      transition: background 0.3s;
+    }
+    .card-content a:hover {
+      background: #16a085;
+    }
+
+    footer {
+      text-align: center;
+      padding: 15px 10px;
+      background: #2c3e50;
+      color: #bdc3c7;
+      font-size: 0.9rem;
+      margin-top: auto;
+    }
+
+    /* Реклама */
+    .ads {
+      max-width: 728px;
+      margin: 30px auto;
+      text-align: center;
+    }
+    .ads img {
+      max-width: 100%;
+      border-radius: 8px;
+      box-shadow: 0 3px 8px rgba(0,0,0,0.1);
+    }
+
+    /* Адаптивность */
+    @media (max-width: 480px) {
+      nav a {
+        padding: 12px 15px;
+        font-size: 0.9rem;
+      }
+      .card img {
+        height: 200px;
+      }
+    }
   </style>
   <script>
-    document.addEventListener('contextmenu', e => e.preventDefault()); // Отключить правый клик
+    // Простое переключение активного раздела (для красоты)
+    document.addEventListener('DOMContentLoaded', () => {
+      const navLinks = document.querySelectorAll('nav a');
+      navLinks.forEach(link => {
+        link.addEventListener('click', e => {
+          e.preventDefault();
+          navLinks.forEach(l => l.classList.remove('active'));
+          link.classList.add('active');
+
+          // Показать нужный раздел, скрыть остальные
+          const target = link.getAttribute('href').substring(1);
+          document.querySelectorAll('main section').forEach(sec => {
+            if (sec.id === target) sec.style.display = 'grid';
+            else sec.style.display = 'none';
+          });
+        });
+      });
+
+      // По умолчанию активен первый раздел
+      navLinks[0].click();
+    });
   </script>
 </head>
 <body>
   <header>
-    <h1>📚 Медиатека: фильмы, комиксы, книги</h1>
+    <h1>📚 Медиатека: Фильмы, Комиксы, Книги</h1>
   </header>
+
   <nav>
-    <a href="#">Фильмы</a>
-    <a href="#">Комиксы</a>
-    <a href="#">Книги</a>
+    <a href="#films" class="active">Фильмы</a>
+    <a href="#comics">Комиксы</a>
+    <a href="#books">Книги</a>
   </nav>
-  <div class="ads">
-    <!-- Место для рекламы -->
-    <img src="https://via.placeholder.com/728x90?text=Реклама+тут" alt="Реклама" />
-  </div>
-  <div class="container">
-    <div class="item">
-      <img src="https://via.placeholder.com/200x300?text=Фильм+1" alt="Фильм 1" />
-      <p><strong>Фильм 1</strong><br /><a href="#">Смотреть</a></p>
+
+  <main>
+    <!-- Фильмы -->
+    <section id="films" class="grid">
+      <h2 class="section-title">Фильмы</h2>
+      <article class="card">
+        <img src="https://via.placeholder.com/300x270?text=Фильм+1" alt="Фильм 1" />
+        <div class="card-content">
+          <h3>Фильм 1</h3>
+          <a href="#">Смотреть</a>
+        </div>
+      </article>
+      <article class="card">
+        <img src="https://via.placeholder.com/300x270?text=Фильм+2" alt="Фильм 2" />
+        <div class="card-content">
+          <h3>Фильм 2</h3>
+          <a href="#">Смотреть</a>
+        </div>
+      </article>
+      <article class="card">
+        <img src="https://via.placeholder.com/300x270?text=Фильм+3" alt="Фильм 3" />
+        <div class="card-content">
+          <h3>Фильм 3</h3>
+          <a href="#">Смотреть</a>
+        </div>
+      </article>
+    </section>
+
+    <!-- Комиксы -->
+    <section id="comics" class="grid" style="display:none;">
+      <h2 class="section-title">Комиксы</h2>
+      <article class="card">
+        <img src="https://via.placeholder.com/300x270?text=Комикс+1" alt="Комикс 1" />
+        <div class="card-content">
+          <h3>Комикс 1</h3>
+          <a href="#">Читать</a>
+        </div>
+      </article>
+      <article class="card">
+        <img src="https://via.placeholder.com/300x270?text=Комикс+2" alt="Комикс 2" />
+        <div class="card-content">
+          <h3>Комикс 2</h3>
+          <a href="#">Читать</a>
+        </div>
+      </article>
+      <article class="card">
+        <img src="https://via.placeholder.com/300x270?text=Комикс+3" alt="Комикс 3" />
+        <div class="card-content">
+          <h3>Комикс 3</h3>
+          <a href="#">Читать</a>
+        </div>
+      </article>
+    </section>
+
+    <!-- Книги -->
+    <section id="books" class="grid" style="display:none;">
+      <h2 class="section-title">Книги</h2>
+      <article class="card">
+        <img src="https://via.placeholder.com/300x270?text=Книга+1" alt="Книга 1" />
+        <div class="card-content">
+          <h3>Книга 1</h3>
+          <a href="#">Читать</a>
+        </div>
+      </article>
+      <article class="card">
+        <img src="https://via.placeholder.com/300x270?text=Книга+2" alt="Книга 2" />
+        <div class="card-content">
+          <h3>Книга 2</h3>
+          <a href="#">Читать</a>
+        </div>
+      </article>
+      <article class="card">
+        <img src="https://via.placeholder.com/300x270?text=Книга+3" alt="Книга 3" />
+        <div class="card-content">
+          <h3>Книга 3</h3>
+          <a href="#">Читать</a>
+        </div>
+      </article>
+    </section>
+
+    <div class="ads">
+      <!-- Рекламный баннер -->
+      <img src="https://via.placeholder.com/728x90?text=Реклама+здесь" alt="Реклама" />
     </div>
-    <div class="item">
-      <img src="https://via.placeholder.com/200x300?text=Комикс+1" alt="Комикс 1" />
-      <p><strong>Комикс 1</strong><br /><a href="#">Читать</a></p>
-    </div>
-    <div class="item">
-      <img src="https://via.placeholder.com/200x300?text=Книга+1" alt="Книга 1" />
-      <p><strong>Книга 1</strong><br /><a href="#">Читать</a></p>
-    </div>
-  </div>
+  </main>
+
   <footer>
-    &copy; 2025 Медиатека. Контент добавляется для ознакомления. Все права принадлежат владельцам.
+    &copy; 2025 Медиатека. Все права защищены.
   </footer>
 </body>
 </html>
