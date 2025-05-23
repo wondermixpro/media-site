@@ -1,273 +1,329 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Медиатека: Фильмы, Комиксы, Книги</title>
-  <style>
-    /* Сброс и базовые стили */
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
-    body {
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      background: #f5f7fa;
-      color: #333;
-      min-height: 100vh;
-      display: flex;
-      flex-direction: column;
-    }
-    header {
-      background: #2c3e50;
-      color: white;
-      padding: 25px 20px;
-      text-align: center;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.3);
-    }
-    header h1 {
-      font-weight: 700;
-      font-size: 2rem;
-      letter-spacing: 1px;
-    }
-    nav {
-      display: flex;
-      justify-content: center;
-      background: #34495e;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.15);
-    }
-    nav a {
-      color: #ecf0f1;
-      text-decoration: none;
-      padding: 15px 30px;
-      font-weight: 600;
-      transition: background 0.3s, color 0.3s;
-      border-bottom: 3px solid transparent;
-    }
-    nav a:hover,
-    nav a.active {
-      background: #1abc9c;
-      color: white;
-      border-bottom: 3px solid #16a085;
-    }
-
-    main {
-      flex-grow: 1;
-      padding: 30px 20px;
-      max-width: 1100px;
-      margin: 0 auto;
-    }
-    .section-title {
-      font-size: 1.6rem;
-      margin-bottom: 20px;
-      color: #2c3e50;
-      border-left: 6px solid #1abc9c;
-      padding-left: 10px;
-    }
-    .grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-      gap: 20px;
-    }
-    .card {
-      background: white;
-      border-radius: 12px;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-      overflow: hidden;
-      display: flex;
-      flex-direction: column;
-      transition: transform 0.3s ease;
-    }
-    .card:hover {
-      transform: translateY(-5px);
-      box-shadow: 0 10px 20px rgba(0,0,0,0.15);
-    }
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Медиатека с категориями и поиском</title>
+<style>
+  body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    margin:0; padding:0;
+    background:#f0f2f5;
+    color:#333;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+  }
+  header {
+    background:#34495e;
+    color:#ecf0f1;
+    padding: 15px 20px;
+    text-align:center;
+    font-size:1.8rem;
+    font-weight:700;
+    letter-spacing: 1px;
+    box-shadow: 0 3px 7px rgba(0,0,0,0.3);
+  }
+  nav.main-nav {
+    display:flex;
+    background:#2c3e50;
+    justify-content:center;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+  }
+  nav.main-nav button {
+    flex:1;
+    background:none;
+    border:none;
+    padding: 15px 10px;
+    font-weight:600;
+    color:#bdc3c7;
+    cursor:pointer;
+    font-size:1rem;
+    transition: background-color 0.3s, color 0.3s;
+  }
+  nav.main-nav button.active {
+    background:#1abc9c;
+    color:#fff;
+    font-weight:700;
+    box-shadow: inset 0 -3px 0 #16a085;
+  }
+  .subcategory-nav {
+    display:flex;
+    justify-content:center;
+    margin: 10px 0 20px;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+  .subcategory-nav button {
+    background:#fff;
+    border: 2px solid #1abc9c;
+    padding: 7px 15px;
+    border-radius: 20px;
+    cursor:pointer;
+    font-weight:600;
+    color:#1abc9c;
+    transition: background-color 0.3s, color 0.3s;
+  }
+  .subcategory-nav button.active {
+    background:#1abc9c;
+    color:#fff;
+  }
+  .search-bar {
+    max-width: 600px;
+    margin: 0 auto 30px;
+    text-align: center;
+  }
+  .search-bar input {
+    width: 100%;
+    padding: 10px 15px;
+    font-size: 1rem;
+    border: 2px solid #1abc9c;
+    border-radius: 30px;
+    outline:none;
+    transition: box-shadow 0.3s;
+  }
+  .search-bar input:focus {
+    box-shadow: 0 0 8px #1abc9c;
+  }
+  main {
+    flex-grow:1;
+    max-width: 1100px;
+    margin: 0 auto 40px;
+    padding: 0 20px;
+  }
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit,minmax(220px,1fr));
+    gap: 20px;
+  }
+  .card {
+    background:#fff;
+    border-radius: 12px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+    overflow: hidden;
+    transition: transform 0.3s;
+    display: flex;
+    flex-direction: column;
+  }
+  .card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 12px 25px rgba(0,0,0,0.15);
+  }
+  .card img {
+    width: 100%;
+    height: 280px;
+    object-fit: cover;
+  }
+  .card-content {
+    padding: 15px;
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+  .card-content h3 {
+    font-size: 1.2rem;
+    margin-bottom: 10px;
+    color: #2c3e50;
+  }
+  .card-content a {
+    background:#1abc9c;
+    color:#fff;
+    text-decoration:none;
+    padding: 8px 16px;
+    border-radius: 8px;
+    font-weight: 600;
+    text-align: center;
+    transition: background-color 0.3s;
+  }
+  .card-content a:hover {
+    background:#16a085;
+  }
+  footer {
+    background:#34495e;
+    color:#bdc3c7;
+    text-align:center;
+    padding: 15px 10px;
+    font-size: 0.9rem;
+    margin-top: auto;
+  }
+  /* Реклама снизу */
+  .ads {
+    max-width: 728px;
+    margin: 20px auto;
+    text-align:center;
+  }
+  .ads img {
+    max-width: 100%;
+    border-radius: 10px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+  }
+  @media(max-width:480px){
     .card img {
-      width: 100%;
-      height: 270px;
-      object-fit: cover;
+      height: 180px;
     }
-    .card-content {
-      padding: 15px;
-      flex-grow: 1;
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
-    }
-    .card-content h3 {
-      font-size: 1.1rem;
-      margin-bottom: 10px;
-      color: #34495e;
-    }
-    .card-content a {
-      align-self: flex-start;
-      padding: 8px 14px;
-      background: #1abc9c;
-      color: white;
-      text-decoration: none;
-      border-radius: 6px;
-      font-weight: 600;
-      transition: background 0.3s;
-    }
-    .card-content a:hover {
-      background: #16a085;
-    }
-
-    footer {
-      text-align: center;
-      padding: 15px 10px;
-      background: #2c3e50;
-      color: #bdc3c7;
-      font-size: 0.9rem;
-      margin-top: auto;
-    }
-
-    /* Реклама */
-    .ads {
-      max-width: 728px;
-      margin: 30px auto;
-      text-align: center;
-    }
-    .ads img {
-      max-width: 100%;
-      border-radius: 8px;
-      box-shadow: 0 3px 8px rgba(0,0,0,0.1);
-    }
-
-    /* Адаптивность */
-    @media (max-width: 480px) {
-      nav a {
-        padding: 12px 15px;
-        font-size: 0.9rem;
-      }
-      .card img {
-        height: 200px;
-      }
-    }
-  </style>
-  <script>
-    // Простое переключение активного раздела (для красоты)
-    document.addEventListener('DOMContentLoaded', () => {
-      const navLinks = document.querySelectorAll('nav a');
-      navLinks.forEach(link => {
-        link.addEventListener('click', e => {
-          e.preventDefault();
-          navLinks.forEach(l => l.classList.remove('active'));
-          link.classList.add('active');
-
-          // Показать нужный раздел, скрыть остальные
-          const target = link.getAttribute('href').substring(1);
-          document.querySelectorAll('main section').forEach(sec => {
-            if (sec.id === target) sec.style.display = 'grid';
-            else sec.style.display = 'none';
-          });
-        });
-      });
-
-      // По умолчанию активен первый раздел
-      navLinks[0].click();
-    });
-  </script>
+  }
+</style>
 </head>
 <body>
-  <header>
-    <h1>📚 Медиатека: Фильмы, Комиксы, Книги</h1>
-  </header>
+  <header>📚 Медиатека: Фильмы, Комиксы, Книги</header>
 
-  <nav>
-    <a href="#films" class="active">Фильмы</a>
-    <a href="#comics">Комиксы</a>
-    <a href="#books">Книги</a>
+  <!-- Главное меню -->
+  <nav class="main-nav">
+    <button class="active" data-section="films">Фильмы</button>
+    <button data-section="comics">Комиксы</button>
+    <button data-section="books">Книги</button>
   </nav>
 
+  <!-- Подкатегории -->
+  <nav class="subcategory-nav" id="subcategory-nav">
+    <!-- Здесь динамически будут кнопки -->
+  </nav>
+
+  <!-- Поиск -->
+  <div class="search-bar">
+    <input type="text" id="searchInput" placeholder="Поиск по названию..." />
+  </div>
+
   <main>
-    <!-- Фильмы -->
-    <section id="films" class="grid">
-      <h2 class="section-title">Фильмы</h2>
-      <article class="card">
-        <img src="https://via.placeholder.com/300x270?text=Фильм+1" alt="Фильм 1" />
-        <div class="card-content">
-          <h3>Фильм 1</h3>
-          <a href="#">Смотреть</a>
-        </div>
-      </article>
-      <article class="card">
-        <img src="https://via.placeholder.com/300x270?text=Фильм+2" alt="Фильм 2" />
-        <div class="card-content">
-          <h3>Фильм 2</h3>
-          <a href="#">Смотреть</a>
-        </div>
-      </article>
-      <article class="card">
-        <img src="https://via.placeholder.com/300x270?text=Фильм+3" alt="Фильм 3" />
-        <div class="card-content">
-          <h3>Фильм 3</h3>
-          <a href="#">Смотреть</a>
-        </div>
-      </article>
-    </section>
-
-    <!-- Комиксы -->
-    <section id="comics" class="grid" style="display:none;">
-      <h2 class="section-title">Комиксы</h2>
-      <article class="card">
-        <img src="https://via.placeholder.com/300x270?text=Комикс+1" alt="Комикс 1" />
-        <div class="card-content">
-          <h3>Комикс 1</h3>
-          <a href="#">Читать</a>
-        </div>
-      </article>
-      <article class="card">
-        <img src="https://via.placeholder.com/300x270?text=Комикс+2" alt="Комикс 2" />
-        <div class="card-content">
-          <h3>Комикс 2</h3>
-          <a href="#">Читать</a>
-        </div>
-      </article>
-      <article class="card">
-        <img src="https://via.placeholder.com/300x270?text=Комикс+3" alt="Комикс 3" />
-        <div class="card-content">
-          <h3>Комикс 3</h3>
-          <a href="#">Читать</a>
-        </div>
-      </article>
-    </section>
-
-    <!-- Книги -->
-    <section id="books" class="grid" style="display:none;">
-      <h2 class="section-title">Книги</h2>
-      <article class="card">
-        <img src="https://via.placeholder.com/300x270?text=Книга+1" alt="Книга 1" />
-        <div class="card-content">
-          <h3>Книга 1</h3>
-          <a href="#">Читать</a>
-        </div>
-      </article>
-      <article class="card">
-        <img src="https://via.placeholder.com/300x270?text=Книга+2" alt="Книга 2" />
-        <div class="card-content">
-          <h3>Книга 2</h3>
-          <a href="#">Читать</a>
-        </div>
-      </article>
-      <article class="card">
-        <img src="https://via.placeholder.com/300x270?text=Книга+3" alt="Книга 3" />
-        <div class="card-content">
-          <h3>Книга 3</h3>
-          <a href="#">Читать</a>
-        </div>
-      </article>
-    </section>
-
-    <div class="ads">
-      <!-- Рекламный баннер -->
-      <img src="https://via.placeholder.com/728x90?text=Реклама+здесь" alt="Реклама" />
+    <div class="grid" id="cardsContainer">
+      <!-- Карточки будут здесь -->
     </div>
   </main>
 
-  <footer>
-    &copy; 2025 Медиатека. Все права защищены.
-  </footer>
+  <div class="ads">
+    <img src="https://via.placeholder.com/728x90?text=Реклама+здесь" alt="Реклама" />
+  </div>
+
+  <footer>&copy; 2025 Медиатека. Все права защищены.</footer>
+
+<script>
+  // Данные: разделы, подкатегории, и элементы
+  const data = {
+    films: {
+      subcategories: ["Фильмы", "Сериалы", "Мультсериалы", "Мультфильмы"],
+      items: {
+        "Фильмы": [
+          {title: "Фильм 1", img:"https://via.placeholder.com/300x280?text=Фильм+1", link:"#"},
+          {title: "Фильм 2", img:"https://via.placeholder.com/300x280?text=Фильм+2", link:"#"},
+          {title: "Фильм 3", img:"https://via.placeholder.com/300x280?text=Фильм+3", link:"#"},
+        ],
+        "Сериалы": [
+          {title: "Сериал 1", img:"https://via.placeholder.com/300x280?text=Сериал+1", link:"#"},
+          {title: "Сериал 2", img:"https://via.placeholder.com/300x280?text=Сериал+2", link:"#"},
+        ],
+        "Мультсериалы": [
+          {title: "Мультсериал 1", img:"https://via.placeholder.com/300x280?text=Мультсериал+1", link:"#"},
+          {title: "Мультсериал 2", img:"https://via.placeholder.com/300x280?text=Мультсериал+2", link:"#"},
+        ],
+        "Мультфильмы": [
+          {title: "Мультфильм 1", img:"https://via.placeholder.com/300x280?text=Мультфильм+1", link:"#"},
+          {title: "Мультфильм 2", img:"https://via.placeholder.com/300x280?text=Мультфильм+2", link:"#"},
+        ]
+      }
+    },
+    comics: {
+      subcategories: ["Манга", "Манхва", "Манхуа"],
+      items: {
+        "Манга": [
+          {title: "Манга 1", img:"https://via.placeholder.com/300x280?text=Манга+1", link:"#"},
+          {title: "Манга 2", img:"https://via.placeholder.com/300x280?text=Манга+2", link:"#"},
+        ],
+        "Манхва": [
+          {title: "Манхва 1", img:"https://via.placeholder.com/300x280?text=Манхва+1", link:"#"},
+        ],
+        "Манхуа": [
+          {title: "Манхуа 1", img:"https://via.placeholder.com/300x280?text=Манхуа+1", link:"#"},
+        ]
+      }
+    },
+    books: {
+      subcategories: ["Романы", "Научная литература", "Фантастика"],
+      items: {
+        "Романы": [
+          {title: "Роман 1", img:"https://via.placeholder.com/300x280?text=Роман+1", link:"#"},
+          {title: "Роман 2", img:"https://via.placeholder.com/300x280?text=Роман+2", link:"#"},
+        ],
+        "Научная литература": [
+          {title: "Книга 1", img:"https://via.placeholder.com/300x280?text=Книга+1", link:"#"},
+        ],
+        "Фантастика": [
+          {title: "Книга 2", img:"https://via.placeholder.com/300x280?text=Книга+2", link:"#"},
+        ]
+      }
+    }
+  };
+
+  // Текущий выбранный раздел и подкатегория
+  let currentSection = "films";
+  let currentSubcategory = data[currentSection].subcategories[0];
+
+  const mainNavButtons = document.querySelectorAll("nav.main-nav button");
+  const subcategoryNav = document.getElementById("subcategory-nav");
+  const cardsContainer = document.getElementById("cardsContainer");
+  const searchInput = document.getElementById("searchInput");
+
+  // Функция для создания подкатегорий
+  function renderSubcategories() {
+    subcategoryNav.innerHTML = "";
+    data[currentSection].subcategories.forEach(subcat => {
+      const btn = document.createElement("button");
+      btn.textContent = subcat;
+      if(subcat === currentSubcategory) btn.classList.add("active");
+      btn.addEventListener("click", () => {
+        currentSubcategory = subcat;
+        renderSubcategories();
+        renderCards();
+      });
+      subcategoryNav.appendChild(btn);
+    });
+  }
+
+  // Функция для отрисовки карточек с учетом поиска
+  function renderCards() {
+    const searchText = searchInput.value.toLowerCase();
+    cardsContainer.innerHTML = "";
+    const items = data[currentSection].items[currentSubcategory];
+    const filtered = items.filter(item => item.title.toLowerCase().includes(searchText));
+    if(filtered.length === 0) {
+      cardsContainer.innerHTML = "<p>Ничего не найдено.</p>";
+      return;
+    }
+    filtered.forEach(item => {
+      const card = document.createElement("div");
+      card.classList.add("card");
+      card.innerHTML = `
+        <img src="${item.img}" alt="${item.title}" />
+        <div class="card-content">
+          <h3>${item.title}</h3>
+          <a href="${item.link}" target="_blank" rel="noopener noreferrer">Перейти</a>
+        </div>
+      `;
+      cardsContainer.appendChild(card);
+    });
+  }
+
+  // Обработчики выбора раздела
+  mainNavButtons.forEach(btn => {
+    btn.addEventListener("click", () => {
+      mainNavButtons.forEach(b => b.classList.remove("active"));
+      btn.classList.add("active");
+      currentSection = btn.getAttribute("data-section");
+      currentSubcategory = data[currentSection].subcategories[0];
+      searchInput.value = "";
+      renderSubcategories();
+      renderCards();
+    });
+  });
+
+  // Обработчик поиска
+  searchInput.addEventListener("input", () => {
+    renderCards();
+  });
+
+  // Инициализация
+  renderSubcategories();
+  renderCards();
+</script>
 </body>
 </html>
