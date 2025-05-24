@@ -5,155 +5,145 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Media Site</title>
   <style>
-    * { margin: 0; padding: 0; box-sizing: border-box; }
-    body { font-family: Arial, sans-serif; background: #f0f0f0; }
-    header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      background-color: #222;
-      color: #fff;
-      padding: 1rem 2rem;
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
     }
-    header h1 {
-      font-size: 1.5rem;
+    body {
+      font-family: sans-serif;
+      background-color: #ffffff;
+      color: #000000;
+      padding: 20px;
     }
-    .ads {
-      position: fixed;
-      top: 0;
-      bottom: 0;
-      width: 120px;
-      background: #ccc;
+    h1 {
       text-align: center;
-      line-height: 30px;
-      color: #333;
-      z-index: 1;
+      margin-bottom: 20px;
     }
-    .ads.left { left: 0; }
-    .ads.right { right: 0; }
-    .container {
-      margin: 0 140px;
-      padding: 2rem;
-    }
-    nav {
-      display: flex;
-      gap: 1rem;
-      margin-bottom: 1rem;
-    }
-    nav button {
-      padding: 0.5rem 1rem;
-      border: none;
-      background-color: #444;
-      color: #fff;
-      cursor: pointer;
-      border-radius: 6px;
-    }
-    nav button.active {
-      background-color: #666;
+    .language-switcher {
+      text-align: center;
+      margin-bottom: 20px;
     }
     .search {
-      margin-bottom: 1rem;
+      max-width: 500px;
+      margin: 0 auto 20px;
     }
     .search input {
       width: 100%;
-      padding: 0.5rem;
-      font-size: 1rem;
+      padding: 10px;
+      font-size: 16px;
+      border: 1px solid #ccc;
+      border-radius: 6px;
     }
     .section {
-      display: none;
+      margin-top: 40px;
     }
-    .section.active {
-      display: grid;
-      gap: 1rem;
+    .section h2 {
+      font-size: 24px;
+      margin-bottom: 10px;
+      border-bottom: 2px solid #eee;
+      padding-bottom: 5px;
     }
-    .films .card { width: calc(33% - 1rem); }
-    .comics .card, .books .card { width: calc(20% - 1rem); }
-    .section {
-      grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+    .grid {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
     }
     .card {
-      background-color: #fff;
+      background: #f9f9f9;
+      padding: 10px;
       border-radius: 8px;
-      overflow: hidden;
-      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
       text-align: center;
+      flex: 1 1 calc(33.333% - 10px);
+      max-width: calc(33.333% - 10px);
     }
     .card img {
-      width: 100%;
+      max-width: 100%;
       height: auto;
+      border-radius: 4px;
     }
     .card h3 {
-      padding: 0.5rem;
-      font-size: 1rem;
+      margin-top: 10px;
+      font-size: 16px;
+    }
+    .comics .card, .books .card {
+      flex: 1 1 calc(20% - 10px);
+      max-width: calc(20% - 10px);
+    }
+    .ads {
+      display: none;
     }
   </style>
 </head>
 <body>
-  <div class="ads left">Реклама</div>
-  <div class="ads right">Реклама</div>
-  <header>
-    <h1>Media Site</h1>
-  </header>
-  <div class="container">
-    <nav>
-      <button class="tab active" onclick="switchTab('films')">Фильмы</button>
-      <button class="tab" onclick="switchTab('comics')">Комиксы</button>
-      <button class="tab" onclick="switchTab('books')">Книги</button>
-    </nav>
-    <div class="search">
-      <input type="text" id="searchInput" placeholder="Поиск..." oninput="filterCards()">
-    </div>
-    <div id="films" class="section active films"></div>
-    <div id="comics" class="section comics"></div>
-    <div id="books" class="section books"></div>
+  <h1>Media Site</h1>
+  <div class="language-switcher">
+    <button onclick="switchLanguage('ru')">Русский</button>
+    <button onclick="switchLanguage('en')">English</button>
   </div>
-
+  <div class="search">
+    <input type="text" id="searchInput" placeholder="Поиск..." oninput="filterCards()">
+  </div>
+  <div class="section" id="films-section">
+    <h2>Фильмы</h2>
+    <div class="grid films"></div>
+  </div>
+  <div class="section" id="comics-section">
+    <h2>Комиксы</h2>
+    <div class="grid comics"></div>
+  </div>
+  <div class="section" id="books-section">
+    <h2>Книги</h2>
+    <div class="grid books"></div>
+  </div>
   <script>
     const data = [
-      { title: 'Фильм 1', type: 'films', image: 'https://placehold.co/300x400' },
-      { title: 'Фильм 2', type: 'films', image: 'https://placehold.co/300x400' },
-      { title: 'Фильм 3', type: 'films', image: 'https://placehold.co/300x400' },
-      { title: 'Комикс 1', type: 'comics', image: 'https://placehold.co/300x400' },
-      { title: 'Комикс 2', type: 'comics', image: 'https://placehold.co/300x400' },
-      { title: 'Комикс 3', type: 'comics', image: 'https://placehold.co/300x400' },
-      { title: 'Книга 1', type: 'books', image: 'https://placehold.co/300x400' },
-      { title: 'Книга 2', type: 'books', image: 'https://placehold.co/300x400' },
-      { title: 'Книга 3', type: 'books', image: 'https://placehold.co/300x400' }
+      { title: 'Фильм 1', type: 'films', image: 'https://placehold.co/200x300' },
+      { title: 'Фильм 2', type: 'films', image: 'https://placehold.co/200x300' },
+      { title: 'Фильм 3', type: 'films', image: 'https://placehold.co/200x300' },
+      { title: 'Комикс 1', type: 'comics', image: 'https://placehold.co/200x300' },
+      { title: 'Комикс 2', type: 'comics', image: 'https://placehold.co/200x300' },
+      { title: 'Комикс 3', type: 'comics', image: 'https://placehold.co/200x300' },
+      { title: 'Комикс 4', type: 'comics', image: 'https://placehold.co/200x300' },
+      { title: 'Комикс 5', type: 'comics', image: 'https://placehold.co/200x300' },
+      { title: 'Книга 1', type: 'books', image: 'https://placehold.co/200x300' },
+      { title: 'Книга 2', type: 'books', image: 'https://placehold.co/200x300' },
+      { title: 'Книга 3', type: 'books', image: 'https://placehold.co/200x300' },
+      { title: 'Книга 4', type: 'books', image: 'https://placehold.co/200x300' },
+      { title: 'Книга 5', type: 'books', image: 'https://placehold.co/200x300' }
     ];
 
     function renderCards() {
       ['films', 'comics', 'books'].forEach(type => {
-        const section = document.getElementById(type);
-        section.innerHTML = '';
+        const container = document.querySelector(`.${type}`);
+        container.innerHTML = '';
         data.filter(item => item.type === type).forEach(item => {
           const card = document.createElement('div');
           card.className = 'card';
           card.innerHTML = `<img src="${item.image}" alt="${item.title}"><h3>${item.title}</h3>`;
-          section.appendChild(card);
+          container.appendChild(card);
         });
       });
-    }
-
-    function switchTab(tab) {
-      document.querySelectorAll('.tab').forEach(btn => btn.classList.remove('active'));
-      event.target.classList.add('active');
-      document.querySelectorAll('.section').forEach(section => section.classList.remove('active'));
-      document.getElementById(tab).classList.add('active');
     }
 
     function filterCards() {
       const search = document.getElementById('searchInput').value.toLowerCase();
-      ['films', 'comics', 'books'].forEach(type => {
-        const section = document.getElementById(type);
-        const cards = section.querySelectorAll('.card');
-        cards.forEach(card => {
-          const title = card.querySelector('h3').textContent.toLowerCase();
-          card.style.display = title.includes(search) ? 'block' : 'none';
-        });
+      document.querySelectorAll('.card').forEach(card => {
+        const title = card.querySelector('h3').textContent.toLowerCase();
+        card.style.display = title.includes(search) ? 'block' : 'none';
       });
     }
 
-    renderCards();
-  </script>
-</body>
-</html>
+    function switchLanguage(lang) {
+      const titles = {
+        ru: ['Фильмы', 'Комиксы', 'Книги'],
+        en: ['Films', 'Comics', 'Books']
+      };
+      document.querySelectorAll('.section').forEach((section, i) => {
+        section.querySelector('h2').textContent = titles[lang][i];
+      });
+      document.getElementById('searchInput').placeholder = lang === 'ru' ? 'Поиск...' : 'Search...';
+    }
+
+    render
