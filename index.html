@@ -3,33 +3,20 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Медиа Сайт</title>
-  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+  <title>Media Site</title>
   <style>
-    body {
-      font-family: 'Roboto', sans-serif;
-      margin: 0;
-      background: #f5f5f5;
-    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: Arial, sans-serif; background: #f0f0f0; }
     header {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      padding: 1rem;
-      background-color: #1e1e1e;
-      color: white;
+      background-color: #222;
+      color: #fff;
+      padding: 1rem 2rem;
     }
-    nav button {
-      margin-right: 1rem;
-      background: #333;
-      color: white;
-      border: none;
-      padding: 0.5rem 1rem;
-      cursor: pointer;
-      border-radius: 8px;
-    }
-    nav button.active {
-      background: #555;
+    header h1 {
+      font-size: 1.5rem;
     }
     .ads {
       position: fixed;
@@ -44,57 +31,60 @@
     }
     .ads.left { left: 0; }
     .ads.right { right: 0; }
-    .main {
-      margin: 0 130px;
-      padding: 1rem;
+    .container {
+      margin: 0 140px;
+      padding: 2rem;
+    }
+    nav {
+      display: flex;
+      gap: 1rem;
+      margin-bottom: 1rem;
+    }
+    nav button {
+      padding: 0.5rem 1rem;
+      border: none;
+      background-color: #444;
+      color: #fff;
+      cursor: pointer;
+      border-radius: 6px;
+    }
+    nav button.active {
+      background-color: #666;
+    }
+    .search {
+      margin-bottom: 1rem;
     }
     .search input {
       width: 100%;
-      padding: 0.75rem;
+      padding: 0.5rem;
       font-size: 1rem;
-      margin-bottom: 1rem;
-      border-radius: 10px;
-      border: 1px solid #ddd;
     }
-    .cards {
+    .section {
+      display: none;
+    }
+    .section.active {
       display: grid;
       gap: 1rem;
     }
-    .films .cards {
-      grid-template-columns: repeat(3, 1fr);
-    }
-    .comics .cards,
-    .books .cards {
-      grid-template-columns: repeat(5, 1fr);
+    .films .card { width: calc(33% - 1rem); }
+    .comics .card, .books .card { width: calc(20% - 1rem); }
+    .section {
+      grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
     }
     .card {
-      background: white;
-      border-radius: 12px;
-      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+      background-color: #fff;
+      border-radius: 8px;
       overflow: hidden;
-      transition: transform 0.2s;
-    }
-    .card:hover {
-      transform: scale(1.02);
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+      text-align: center;
     }
     .card img {
       width: 100%;
       height: auto;
-      display: block;
     }
     .card h3 {
-      margin: 0;
-      padding: 0.75rem;
+      padding: 0.5rem;
       font-size: 1rem;
-    }
-    .lang-switch {
-      margin-left: auto;
-      background: #333;
-      color: white;
-      border: none;
-      padding: 0.5rem 1rem;
-      cursor: pointer;
-      border-radius: 8px;
     }
   </style>
 </head>
@@ -102,64 +92,68 @@
   <div class="ads left">Реклама</div>
   <div class="ads right">Реклама</div>
   <header>
+    <h1>Media Site</h1>
+  </header>
+  <div class="container">
     <nav>
       <button class="tab active" onclick="switchTab('films')">Фильмы</button>
       <button class="tab" onclick="switchTab('comics')">Комиксы</button>
       <button class="tab" onclick="switchTab('books')">Книги</button>
     </nav>
-    <button class="lang-switch" onclick="toggleLang()">EN</button>
-  </header>
-  <div class="main">
     <div class="search">
-      <input type="text" id="search" placeholder="Поиск..." oninput="renderContent()">
+      <input type="text" id="searchInput" placeholder="Поиск..." oninput="filterCards()">
     </div>
-    <div id="contentWrapper" class="films">
-      <div class="cards" id="content"></div>
-    </div>
+    <div id="films" class="section active films"></div>
+    <div id="comics" class="section comics"></div>
+    <div id="books" class="section books"></div>
   </div>
+
   <script>
-    let lang = 'ru';
-    let currentTab = 'films';
     const data = [
-      { title: 'Мой фильм', type: 'films', category: 'мультфильм', image: 'https://placehold.co/300x400', lang: 'ru' },
-      { title: 'My Movie', type: 'films', category: 'movie', image: 'https://placehold.co/300x400', lang: 'en' },
-      { title: 'Манга Пример', type: 'comics', category: 'манга', image: 'https://placehold.co/300x400', lang: 'ru' },
-      { title: 'Комикс 2', type: 'comics', category: 'манга', image: 'https://placehold.co/300x400', lang: 'ru' },
-      { title: 'Book 1', type: 'books', category: 'fantasy', image: 'https://placehold.co/300x400', lang: 'en' },
-      { title: 'Книга 2', type: 'books', category: 'учебная', image: 'https://placehold.co/300x400', lang: 'ru' }
+      { title: 'Фильм 1', type: 'films', image: 'https://placehold.co/300x400' },
+      { title: 'Фильм 2', type: 'films', image: 'https://placehold.co/300x400' },
+      { title: 'Фильм 3', type: 'films', image: 'https://placehold.co/300x400' },
+      { title: 'Комикс 1', type: 'comics', image: 'https://placehold.co/300x400' },
+      { title: 'Комикс 2', type: 'comics', image: 'https://placehold.co/300x400' },
+      { title: 'Комикс 3', type: 'comics', image: 'https://placehold.co/300x400' },
+      { title: 'Книга 1', type: 'books', image: 'https://placehold.co/300x400' },
+      { title: 'Книга 2', type: 'books', image: 'https://placehold.co/300x400' },
+      { title: 'Книга 3', type: 'books', image: 'https://placehold.co/300x400' }
     ];
 
-    function toggleLang() {
-      lang = (lang === 'ru') ? 'en' : 'ru';
-      document.querySelector('.lang-switch').textContent = lang === 'ru' ? 'EN' : 'RU';
-      renderContent();
-    }
-
-    function switchTab(tab) {
-      currentTab = tab;
-      document.querySelectorAll('.tab').forEach(btn => btn.classList.remove('active'));
-      document.querySelector(`.tab[onclick*="${tab}"]`).classList.add('active');
-      const wrapper = document.getElementById('contentWrapper');
-      wrapper.className = tab;
-      renderContent();
-    }
-
-    function renderContent() {
-      const search = document.getElementById('search').value.toLowerCase();
-      const content = document.getElementById('content');
-      content.innerHTML = '';
-      data.filter(d => d.type === currentTab && d.lang === lang && d.title.toLowerCase().includes(search))
-           .forEach(d => {
-        content.innerHTML += `
-          <div class="card">
-            <img src="${d.image}" alt="${d.title}">
-            <h3>${d.title}</h3>
-          </div>
-        `;
+    function renderCards() {
+      ['films', 'comics', 'books'].forEach(type => {
+        const section = document.getElementById(type);
+        section.innerHTML = '';
+        data.filter(item => item.type === type).forEach(item => {
+          const card = document.createElement('div');
+          card.className = 'card';
+          card.innerHTML = `<img src="${item.image}" alt="${item.title}"><h3>${item.title}</h3>`;
+          section.appendChild(card);
+        });
       });
     }
 
-    renderContent();
+    function switchTab(tab) {
+      document.querySelectorAll('.tab').forEach(btn => btn.classList.remove('active'));
+      event.target.classList.add('active');
+      document.querySelectorAll('.section').forEach(section => section.classList.remove('active'));
+      document.getElementById(tab).classList.add('active');
+    }
+
+    function filterCards() {
+      const search = document.getElementById('searchInput').value.toLowerCase();
+      ['films', 'comics', 'books'].forEach(type => {
+        const section = document.getElementById(type);
+        const cards = section.querySelectorAll('.card');
+        cards.forEach(card => {
+          const title = card.querySelector('h3').textContent.toLowerCase();
+          card.style.display = title.includes(search) ? 'block' : 'none';
+        });
+      });
+    }
+
+    renderCards();
   </script>
 </body>
 </html>
