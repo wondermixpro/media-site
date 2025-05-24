@@ -4,167 +4,145 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Медиа Сайт</title>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
   <style>
     body {
+      font-family: 'Roboto', sans-serif;
       margin: 0;
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      background-color: #f1f3f6;
-      color: #333;
+      background: #f7f7f7;
     }
     header {
-      background-color: #2c3e50;
-      padding: 1rem;
       display: flex;
       justify-content: space-between;
       align-items: center;
-      color: white;
-    }
-    .logo {
-      font-size: 1.5rem;
-      font-weight: bold;
-    }
-    .nav-buttons button {
-      background-color: transparent;
-      border: 2px solid #1abc9c;
-      color: #1abc9c;
-      padding: 0.5rem 1rem;
-      margin: 0 0.3rem;
-      border-radius: 20px;
-      cursor: pointer;
-      transition: 0.3s;
-    }
-    .nav-buttons button:hover {
-      background-color: #1abc9c;
-      color: white;
-    }
-    .search {
-      margin: 1rem auto;
-      text-align: center;
-    }
-    .search input {
-      padding: 0.7rem;
-      width: 60%;
-      border-radius: 25px;
-      border: 1px solid #ccc;
-      font-size: 1rem;
-    }
-    .container {
-      display: flex;
       padding: 1rem;
+      background-color: #222;
+      color: white;
+    }
+    nav button {
+      margin-right: 1rem;
+      background: #444;
+      color: white;
+      border: none;
+      padding: 0.5rem 1rem;
+      cursor: pointer;
+    }
+    nav button.active {
+      background: #666;
     }
     .ads {
-      width: 10%;
-      background-color: #dfe6e9;
-      min-height: 80vh;
+      position: fixed;
+      top: 0;
+      bottom: 0;
+      width: 120px;
+      background: #ccc;
       text-align: center;
-      padding-top: 2rem;
+      line-height: 30px;
+      color: #333;
     }
-    .content {
-      width: 80%;
+    .ads.left { left: 0; }
+    .ads.right { right: 0; }
+    .main {
+      margin: 0 130px;
       padding: 1rem;
     }
-    .section-title {
-      font-size: 1.5rem;
-      margin: 2rem 0 1rem 0;
-      border-bottom: 2px solid #1abc9c;
-      padding-bottom: 0.5rem;
+    .search {
+      margin-bottom: 1rem;
     }
-    .card-grid {
+    .search input {
+      width: 100%;
+      padding: 0.5rem;
+      font-size: 1rem;
+    }
+    .cards {
       display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
       gap: 1rem;
     }
-    .films .card-grid {
-      grid-template-columns: repeat(3, 1fr);
-    }
-    .comics .card-grid, .books .card-grid {
-      grid-template-columns: repeat(5, 1fr);
-    }
     .card {
-      background-color: white;
+      background: white;
       border-radius: 10px;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
       overflow: hidden;
-      display: flex;
-      flex-direction: column;
-      text-align: center;
+      transition: transform 0.2s;
+    }
+    .card:hover {
+      transform: scale(1.02);
     }
     .card img {
       width: 100%;
-      height: 200px;
-      object-fit: cover;
+      display: block;
     }
-    .card-title {
-      font-weight: bold;
-      margin: 1rem 0 0.5rem;
-    }
-    .card button {
-      background-color: #1abc9c;
-      border: none;
+    .card h3 {
+      margin: 0;
       padding: 0.5rem;
-      color: white;
-      margin: 1rem;
-      border-radius: 10px;
-      cursor: pointer;
-      transition: 0.3s;
     }
-    .card button:hover {
-      background-color: #16a085;
+    .lang-switch {
+      margin-left: auto;
+      background: #444;
+      color: white;
+      border: none;
+      padding: 0.5rem 1rem;
+      cursor: pointer;
     }
   </style>
 </head>
 <body>
+  <div class="ads left">Реклама</div>
+  <div class="ads right">Реклама</div>
   <header>
-    <div class="logo">MediaSite</div>
-    <div class="nav-buttons">
-      <button onclick="showSection('films')">Фильмы</button>
-      <button onclick="showSection('comics')">Комиксы</button>
-      <button onclick="showSection('books')">Книги</button>
-    </div>
+    <nav>
+      <button class="tab active" onclick="switchTab('films')">Фильмы</button>
+      <button class="tab" onclick="switchTab('comics')">Комиксы</button>
+      <button class="tab" onclick="switchTab('books')">Книги</button>
+    </nav>
+    <button class="lang-switch" onclick="toggleLang()">EN</button>
   </header>
-  <div class="search">
-    <input type="text" placeholder="Поиск по названию...">
-  </div>
-  <div class="container">
-    <div class="ads">Реклама</div>
-    <div class="content">
-      <section class="films">
-        <div class="section-title">Фильмы</div>
-        <div class="card-grid">
-          <div class="card"><img src="" alt="Фильм 1"><div class="card-title">Фильм 1</div><button>Смотреть</button></div>
-          <div class="card"><img src="" alt="Фильм 2"><div class="card-title">Фильм 2</div><button>Смотреть</button></div>
-          <div class="card"><img src="" alt="Фильм 3"><div class="card-title">Фильм 3</div><button>Смотреть</button></div>
-        </div>
-      </section>
-      <section class="comics">
-        <div class="section-title">Комиксы</div>
-        <div class="card-grid">
-          <div class="card"><img src="" alt="Манга 1"><div class="card-title">Манга 1</div><button>Читать</button></div>
-          <div class="card"><img src="" alt="Манга 2"><div class="card-title">Манга 2</div><button>Читать</button></div>
-          <div class="card"><img src="" alt="Манхва 1"><div class="card-title">Манхва 1</div><button>Читать</button></div>
-          <div class="card"><img src="" alt="Комикс 1"><div class="card-title">Комикс 1</div><button>Читать</button></div>
-          <div class="card"><img src="" alt="Комикс 2"><div class="card-title">Комикс 2</div><button>Читать</button></div>
-        </div>
-      </section>
-      <section class="books">
-        <div class="section-title">Книги</div>
-        <div class="card-grid">
-          <div class="card"><img src="" alt="Книга 1"><div class="card-title">Книга 1</div><button>Читать</button></div>
-          <div class="card"><img src="" alt="Книга 2"><div class="card-title">Книга 2</div><button>Читать</button></div>
-          <div class="card"><img src="" alt="Книга 3"><div class="card-title">Книга 3</div><button>Читать</button></div>
-          <div class="card"><img src="" alt="Книга 4"><div class="card-title">Книга 4</div><button>Читать</button></div>
-          <div class="card"><img src="" alt="Книга 5"><div class="card-title">Книга 5</div><button>Читать</button></div>
-        </div>
-      </section>
+  <div class="main">
+    <div class="search">
+      <input type="text" id="search" placeholder="Поиск..." oninput="renderContent()">
     </div>
-    <div class="ads">Реклама</div>
+    <div class="cards" id="content"></div>
   </div>
   <script>
-    function showSection(name) {
-      document.querySelector('.films').style.display = name === 'films' ? 'block' : 'none';
-      document.querySelector('.comics').style.display = name === 'comics' ? 'block' : 'none';
-      document.querySelector('.books').style.display = name === 'books' ? 'block' : 'none';
+    let lang = 'ru';
+    let currentTab = 'films';
+    const data = [
+      { title: 'Мой фильм', type: 'films', category: 'мультфильм', image: 'https://placehold.co/300x400', lang: 'ru' },
+      { title: 'My Movie', type: 'films', category: 'movie', image: 'https://placehold.co/300x400', lang: 'en' },
+      { title: 'Манга Пример', type: 'comics', category: 'манга', image: 'https://placehold.co/300x400', lang: 'ru' },
+      { title: 'Book Sample', type: 'books', category: 'fantasy', image: 'https://placehold.co/300x400', lang: 'en' }
+    ];
+
+    function toggleLang() {
+      lang = (lang === 'ru') ? 'en' : 'ru';
+      document.querySelector('.lang-switch').textContent = lang === 'ru' ? 'EN' : 'RU';
+      renderContent();
     }
-    showSection('films');
+
+    function switchTab(tab) {
+      currentTab = tab;
+      document.querySelectorAll('.tab').forEach(btn => btn.classList.remove('active'));
+      document.querySelector(`.tab[onclick*="${tab}"]`).classList.add('active');
+      renderContent();
+    }
+
+    function renderContent() {
+      const search = document.getElementById('search').value.toLowerCase();
+      const content = document.getElementById('content');
+      content.innerHTML = '';
+      data.filter(d => d.type === currentTab && d.lang === lang && d.title.toLowerCase().includes(search))
+           .forEach(d => {
+        content.innerHTML += `
+          <div class="card">
+            <img src="${d.image}" alt="${d.title}">
+            <h3>${d.title}</h3>
+          </div>
+        `;
+      });
+    }
+
+    renderContent();
   </script>
 </body>
 </html>
