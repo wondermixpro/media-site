@@ -9,26 +9,27 @@
     body {
       font-family: 'Roboto', sans-serif;
       margin: 0;
-      background: #f7f7f7;
+      background: #f5f5f5;
     }
     header {
       display: flex;
       justify-content: space-between;
       align-items: center;
       padding: 1rem;
-      background-color: #222;
+      background-color: #1e1e1e;
       color: white;
     }
     nav button {
       margin-right: 1rem;
-      background: #444;
+      background: #333;
       color: white;
       border: none;
       padding: 0.5rem 1rem;
       cursor: pointer;
+      border-radius: 8px;
     }
     nav button.active {
-      background: #666;
+      background: #555;
     }
     .ads {
       position: fixed;
@@ -39,6 +40,7 @@
       text-align: center;
       line-height: 30px;
       color: #333;
+      z-index: 1;
     }
     .ads.left { left: 0; }
     .ads.right { right: 0; }
@@ -46,23 +48,29 @@
       margin: 0 130px;
       padding: 1rem;
     }
-    .search {
-      margin-bottom: 1rem;
-    }
     .search input {
       width: 100%;
-      padding: 0.5rem;
+      padding: 0.75rem;
       font-size: 1rem;
+      margin-bottom: 1rem;
+      border-radius: 10px;
+      border: 1px solid #ddd;
     }
     .cards {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
       gap: 1rem;
+    }
+    .films .cards {
+      grid-template-columns: repeat(3, 1fr);
+    }
+    .comics .cards,
+    .books .cards {
+      grid-template-columns: repeat(5, 1fr);
     }
     .card {
       background: white;
-      border-radius: 10px;
-      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+      border-radius: 12px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
       overflow: hidden;
       transition: transform 0.2s;
     }
@@ -71,19 +79,22 @@
     }
     .card img {
       width: 100%;
+      height: auto;
       display: block;
     }
     .card h3 {
       margin: 0;
-      padding: 0.5rem;
+      padding: 0.75rem;
+      font-size: 1rem;
     }
     .lang-switch {
       margin-left: auto;
-      background: #444;
+      background: #333;
       color: white;
       border: none;
       padding: 0.5rem 1rem;
       cursor: pointer;
+      border-radius: 8px;
     }
   </style>
 </head>
@@ -102,7 +113,9 @@
     <div class="search">
       <input type="text" id="search" placeholder="Поиск..." oninput="renderContent()">
     </div>
-    <div class="cards" id="content"></div>
+    <div id="contentWrapper" class="films">
+      <div class="cards" id="content"></div>
+    </div>
   </div>
   <script>
     let lang = 'ru';
@@ -111,7 +124,9 @@
       { title: 'Мой фильм', type: 'films', category: 'мультфильм', image: 'https://placehold.co/300x400', lang: 'ru' },
       { title: 'My Movie', type: 'films', category: 'movie', image: 'https://placehold.co/300x400', lang: 'en' },
       { title: 'Манга Пример', type: 'comics', category: 'манга', image: 'https://placehold.co/300x400', lang: 'ru' },
-      { title: 'Book Sample', type: 'books', category: 'fantasy', image: 'https://placehold.co/300x400', lang: 'en' }
+      { title: 'Комикс 2', type: 'comics', category: 'манга', image: 'https://placehold.co/300x400', lang: 'ru' },
+      { title: 'Book 1', type: 'books', category: 'fantasy', image: 'https://placehold.co/300x400', lang: 'en' },
+      { title: 'Книга 2', type: 'books', category: 'учебная', image: 'https://placehold.co/300x400', lang: 'ru' }
     ];
 
     function toggleLang() {
@@ -124,6 +139,8 @@
       currentTab = tab;
       document.querySelectorAll('.tab').forEach(btn => btn.classList.remove('active'));
       document.querySelector(`.tab[onclick*="${tab}"]`).classList.add('active');
+      const wrapper = document.getElementById('contentWrapper');
+      wrapper.className = tab;
       renderContent();
     }
 
