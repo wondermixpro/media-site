@@ -29,6 +29,7 @@
     background:#2c3e50;
     justify-content:center;
     box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+    flex-wrap: wrap;
   }
   nav.main-nav button {
     flex:1;
@@ -90,8 +91,20 @@
     max-width: 1100px;
     margin: 0 auto 40px;
     padding: 0 20px;
+    display: flex;
+  }
+  .sidebar-ads {
+    width: 120px;
+    margin: 0 10px;
+  }
+  .sidebar-ads img {
+    width: 100%;
+    margin-bottom: 15px;
+    border-radius: 10px;
+    box-shadow: 0 3px 10px rgba(0,0,0,0.1);
   }
   .grid {
+    flex: 1;
     display: grid;
     grid-template-columns: repeat(auto-fit,minmax(220px,1fr));
     gap: 20px;
@@ -147,183 +160,77 @@
     font-size: 0.9rem;
     margin-top: auto;
   }
-  /* Реклама снизу */
-  .ads {
-    max-width: 728px;
-    margin: 20px auto;
-    text-align:center;
-  }
-  .ads img {
-    max-width: 100%;
-    border-radius: 10px;
-    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-  }
-  @media(max-width:480px){
-    .card img {
-      height: 180px;
+  @media(max-width:768px){
+    main {
+      flex-direction: column;
+    }
+    .sidebar-ads {
+      display: none;
     }
   }
 </style>
 </head>
 <body>
-  <header>📚 Медиатека: Фильмы, Комиксы, Книги</header>
+  <header>
+    📚 <span id="title">Медиатека: Фильмы, Комиксы, Книги</span>
+    <select id="languageSelect" style="margin-left: 10px; padding:5px;">
+      <option value="ru">Русский</option>
+      <option value="en">English</option>
+    </select>
+  </header>
 
-  <!-- Главное меню -->
   <nav class="main-nav">
     <button class="active" data-section="films">Фильмы</button>
     <button data-section="comics">Комиксы</button>
     <button data-section="books">Книги</button>
   </nav>
 
-  <!-- Подкатегории -->
-  <nav class="subcategory-nav" id="subcategory-nav">
-    <!-- Здесь динамически будут кнопки -->
-  </nav>
+  <nav class="subcategory-nav" id="subcategory-nav"></nav>
 
-  <!-- Поиск -->
   <div class="search-bar">
     <input type="text" id="searchInput" placeholder="Поиск по названию..." />
   </div>
 
   <main>
-    <div class="grid" id="cardsContainer">
-      <!-- Карточки будут здесь -->
+    <div class="sidebar-ads">
+      <img src="https://via.placeholder.com/120x600?text=Ad+1" alt="Ad 1">
+      <img src="https://via.placeholder.com/120x600?text=Ad+2" alt="Ad 2">
+    </div>
+    <div class="grid" id="cardsContainer"></div>
+    <div class="sidebar-ads">
+      <img src="https://via.placeholder.com/120x600?text=Ad+3" alt="Ad 3">
+      <img src="https://via.placeholder.com/120x600?text=Ad+4" alt="Ad 4">
     </div>
   </main>
-
-  <div class="ads">
-    <img src="https://via.placeholder.com/728x90?text=Реклама+здесь" alt="Реклама" />
-  </div>
 
   <footer>&copy; 2025 Медиатека. Все права защищены.</footer>
 
 <script>
-  // Данные: разделы, подкатегории, и элементы
-  const data = {
-    films: {
-      subcategories: ["Фильмы", "Сериалы", "Мультсериалы", "Мультфильмы"],
-      items: {
-        "Фильмы": [
-          {title: "Фильм 1", img:"https://via.placeholder.com/300x280?text=Фильм+1", link:"#"},
-          {title: "Фильм 2", img:"https://via.placeholder.com/300x280?text=Фильм+2", link:"#"},
-          {title: "Фильм 3", img:"https://via.placeholder.com/300x280?text=Фильм+3", link:"#"},
-        ],
-        "Сериалы": [
-          {title: "Сериал 1", img:"https://via.placeholder.com/300x280?text=Сериал+1", link:"#"},
-          {title: "Сериал 2", img:"https://via.placeholder.com/300x280?text=Сериал+2", link:"#"},
-        ],
-        "Мультсериалы": [
-          {title: "Мультсериал 1", img:"https://via.placeholder.com/300x280?text=Мультсериал+1", link:"#"},
-          {title: "Мультсериал 2", img:"https://via.placeholder.com/300x280?text=Мультсериал+2", link:"#"},
-        ],
-        "Мультфильмы": [
-          {title: "Мультфильм 1", img:"https://via.placeholder.com/300x280?text=Мультфильм+1", link:"#"},
-          {title: "Мультфильм 2", img:"https://via.placeholder.com/300x280?text=Мультфильм+2", link:"#"},
-        ]
-      }
-    },
-    comics: {
-      subcategories: ["Манга", "Манхва", "Манхуа"],
-      items: {
-        "Манга": [
-          {title: "Манга 1", img:"https://via.placeholder.com/300x280?text=Манга+1", link:"#"},
-          {title: "Манга 2", img:"https://via.placeholder.com/300x280?text=Манга+2", link:"#"},
-        ],
-        "Манхва": [
-          {title: "Манхва 1", img:"https://via.placeholder.com/300x280?text=Манхва+1", link:"#"},
-        ],
-        "Манхуа": [
-          {title: "Манхуа 1", img:"https://via.placeholder.com/300x280?text=Манхуа+1", link:"#"},
-        ]
-      }
-    },
-    books: {
-      subcategories: ["Романы", "Научная литература", "Фантастика"],
-      items: {
-        "Романы": [
-          {title: "Роман 1", img:"https://via.placeholder.com/300x280?text=Роман+1", link:"#"},
-          {title: "Роман 2", img:"https://via.placeholder.com/300x280?text=Роман+2", link:"#"},
-        ],
-        "Научная литература": [
-          {title: "Книга 1", img:"https://via.placeholder.com/300x280?text=Книга+1", link:"#"},
-        ],
-        "Фантастика": [
-          {title: "Книга 2", img:"https://via.placeholder.com/300x280?text=Книга+2", link:"#"},
-        ]
-      }
-    }
-  };
-
-  // Текущий выбранный раздел и подкатегория
-  let currentSection = "films";
-  let currentSubcategory = data[currentSection].subcategories[0];
-
-  const mainNavButtons = document.querySelectorAll("nav.main-nav button");
-  const subcategoryNav = document.getElementById("subcategory-nav");
-  const cardsContainer = document.getElementById("cardsContainer");
-  const searchInput = document.getElementById("searchInput");
-
-  // Функция для создания подкатегорий
-  function renderSubcategories() {
-    subcategoryNav.innerHTML = "";
-    data[currentSection].subcategories.forEach(subcat => {
-      const btn = document.createElement("button");
-      btn.textContent = subcat;
-      if(subcat === currentSubcategory) btn.classList.add("active");
-      btn.addEventListener("click", () => {
-        currentSubcategory = subcat;
-        renderSubcategories();
-        renderCards();
-      });
-      subcategoryNav.appendChild(btn);
-    });
+const translations = {
+  ru: {
+    title: "Медиатека: Фильмы, Комиксы, Книги",
+    search: "Поиск по названию...",
+    categories: ["Фильмы", "Комиксы", "Книги"]
+  },
+  en: {
+    title: "Media Library: Movies, Comics, Books",
+    search: "Search by title...",
+    categories: ["Movies", "Comics", "Books"]
   }
+};
 
-  // Функция для отрисовки карточек с учетом поиска
-  function renderCards() {
-    const searchText = searchInput.value.toLowerCase();
-    cardsContainer.innerHTML = "";
-    const items = data[currentSection].items[currentSubcategory];
-    const filtered = items.filter(item => item.title.toLowerCase().includes(searchText));
-    if(filtered.length === 0) {
-      cardsContainer.innerHTML = "<p>Ничего не найдено.</p>";
-      return;
-    }
-    filtered.forEach(item => {
-      const card = document.createElement("div");
-      card.classList.add("card");
-      card.innerHTML = `
-        <img src="${item.img}" alt="${item.title}" />
-        <div class="card-content">
-          <h3>${item.title}</h3>
-          <a href="${item.link}" target="_blank" rel="noopener noreferrer">Перейти</a>
-        </div>
-      `;
-      cardsContainer.appendChild(card);
-    });
-  }
+const languageSelect = document.getElementById("languageSelect");
+const searchInput = document.getElementById("searchInput");
+const mainNavButtons = document.querySelectorAll("nav.main-nav button");
 
-  // Обработчики выбора раздела
-  mainNavButtons.forEach(btn => {
-    btn.addEventListener("click", () => {
-      mainNavButtons.forEach(b => b.classList.remove("active"));
-      btn.classList.add("active");
-      currentSection = btn.getAttribute("data-section");
-      currentSubcategory = data[currentSection].subcategories[0];
-      searchInput.value = "";
-      renderSubcategories();
-      renderCards();
-    });
+languageSelect.addEventListener("change", () => {
+  const lang = languageSelect.value;
+  document.getElementById("title").textContent = translations[lang].title;
+  searchInput.placeholder = translations[lang].search;
+  mainNavButtons.forEach((btn, index) => {
+    btn.textContent = translations[lang].categories[index];
   });
-
-  // Обработчик поиска
-  searchInput.addEventListener("input", () => {
-    renderCards();
-  });
-
-  // Инициализация
-  renderSubcategories();
-  renderCards();
+});
 </script>
 </body>
 </html>
