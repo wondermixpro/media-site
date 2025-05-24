@@ -1,84 +1,91 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Media Site</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Медиа Сайт</title>
   <style>
-    * {
-      box-sizing: border-box;
-    }
     body {
       margin: 0;
-      font-family: Arial, sans-serif;
-      background: #f0f2f5;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-color: #f1f3f6;
+      color: #333;
     }
     header {
+      background-color: #2c3e50;
+      padding: 1rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      color: white;
+    }
+    .logo {
+      font-size: 1.5rem;
+      font-weight: bold;
+    }
+    .nav-buttons button {
+      background-color: transparent;
+      border: 2px solid #1abc9c;
+      color: #1abc9c;
+      padding: 0.5rem 1rem;
+      margin: 0 0.3rem;
+      border-radius: 20px;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+    .nav-buttons button:hover {
+      background-color: #1abc9c;
+      color: white;
+    }
+    .search {
+      margin: 1rem auto;
       text-align: center;
-      padding: 20px;
-      font-size: 2em;
-      background: #ffffff;
-      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+    .search input {
+      padding: 0.7rem;
+      width: 60%;
+      border-radius: 25px;
+      border: 1px solid #ccc;
+      font-size: 1rem;
     }
     .container {
       display: flex;
+      padding: 1rem;
     }
     .ads {
-      width: 120px;
-      background: black;
-      min-height: 100vh;
+      width: 10%;
+      background-color: #dfe6e9;
+      min-height: 80vh;
+      text-align: center;
+      padding-top: 2rem;
     }
-    .main {
-      flex: 1;
-      padding: 20px;
+    .content {
+      width: 80%;
+      padding: 1rem;
     }
-    nav.main-nav {
-      display: flex;
-      justify-content: center;
-      gap: 10px;
-      margin-bottom: 15px;
-      flex-wrap: wrap;
+    .section-title {
+      font-size: 1.5rem;
+      margin: 2rem 0 1rem 0;
+      border-bottom: 2px solid #1abc9c;
+      padding-bottom: 0.5rem;
     }
-    nav.main-nav button,
-    #subcategory-nav button {
-      padding: 10px 20px;
-      border: 2px solid #00bfa5;
-      border-radius: 20px;
-      background: white;
-      color: #00bfa5;
-      cursor: pointer;
-      font-weight: bold;
-    }
-    nav.main-nav button.active,
-    #subcategory-nav button.active {
-      background: #00bfa5;
-      color: white;
-    }
-    #subcategory-nav {
-      display: flex;
-      justify-content: center;
-      gap: 10px;
-      margin-bottom: 15px;
-      flex-wrap: wrap;
-    }
-    #searchInput {
-      display: block;
-      margin: 0 auto 20px;
-      padding: 10px;
-      width: 300px;
-      border-radius: 20px;
-      border: 1px solid #ccc;
-      outline: none;
-    }
-    .cards {
+    .card-grid {
       display: grid;
-      gap: 20px;
+      gap: 1rem;
+    }
+    .films .card-grid {
+      grid-template-columns: repeat(3, 1fr);
+    }
+    .comics .card-grid, .books .card-grid {
+      grid-template-columns: repeat(5, 1fr);
     }
     .card {
-      background: white;
-      border-radius: 12px;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+      background-color: white;
+      border-radius: 10px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
       overflow: hidden;
+      display: flex;
+      flex-direction: column;
       text-align: center;
     }
     .card img {
@@ -86,132 +93,78 @@
       height: 200px;
       object-fit: cover;
     }
-    .card-content {
-      padding: 10px;
+    .card-title {
+      font-weight: bold;
+      margin: 1rem 0 0.5rem;
     }
-    .card-content h3 {
-      margin: 10px 0;
-    }
-    .card-content a {
-      display: inline-block;
-      padding: 8px 16px;
-      background: #00bfa5;
+    .card button {
+      background-color: #1abc9c;
+      border: none;
+      padding: 0.5rem;
       color: white;
-      text-decoration: none;
-      border-radius: 20px;
+      margin: 1rem;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+    .card button:hover {
+      background-color: #16a085;
     }
   </style>
 </head>
 <body>
-  <header>Media Каталог</header>
-  <div class="container">
-    <div class="ads"></div>
-    <div class="main">
-      <nav class="main-nav">
-        <button data-section="films" class="active">1. Фильмы</button>
-        <button data-section="comics">2. Комиксы</button>
-        <button data-section="books">3. Книги</button>
-      </nav>
-      <div id="subcategory-nav"></div>
-      <input type="text" id="searchInput" placeholder="Поиск по названию..." />
-      <div class="cards" id="cardsContainer"></div>
+  <header>
+    <div class="logo">MediaSite</div>
+    <div class="nav-buttons">
+      <button onclick="showSection('films')">Фильмы</button>
+      <button onclick="showSection('comics')">Комиксы</button>
+      <button onclick="showSection('books')">Книги</button>
     </div>
-    <div class="ads"></div>
+  </header>
+  <div class="search">
+    <input type="text" placeholder="Поиск по названию...">
+  </div>
+  <div class="container">
+    <div class="ads">Реклама</div>
+    <div class="content">
+      <section class="films">
+        <div class="section-title">Фильмы</div>
+        <div class="card-grid">
+          <div class="card"><img src="" alt="Фильм 1"><div class="card-title">Фильм 1</div><button>Смотреть</button></div>
+          <div class="card"><img src="" alt="Фильм 2"><div class="card-title">Фильм 2</div><button>Смотреть</button></div>
+          <div class="card"><img src="" alt="Фильм 3"><div class="card-title">Фильм 3</div><button>Смотреть</button></div>
+        </div>
+      </section>
+      <section class="comics">
+        <div class="section-title">Комиксы</div>
+        <div class="card-grid">
+          <div class="card"><img src="" alt="Манга 1"><div class="card-title">Манга 1</div><button>Читать</button></div>
+          <div class="card"><img src="" alt="Манга 2"><div class="card-title">Манга 2</div><button>Читать</button></div>
+          <div class="card"><img src="" alt="Манхва 1"><div class="card-title">Манхва 1</div><button>Читать</button></div>
+          <div class="card"><img src="" alt="Комикс 1"><div class="card-title">Комикс 1</div><button>Читать</button></div>
+          <div class="card"><img src="" alt="Комикс 2"><div class="card-title">Комикс 2</div><button>Читать</button></div>
+        </div>
+      </section>
+      <section class="books">
+        <div class="section-title">Книги</div>
+        <div class="card-grid">
+          <div class="card"><img src="" alt="Книга 1"><div class="card-title">Книга 1</div><button>Читать</button></div>
+          <div class="card"><img src="" alt="Книга 2"><div class="card-title">Книга 2</div><button>Читать</button></div>
+          <div class="card"><img src="" alt="Книга 3"><div class="card-title">Книга 3</div><button>Читать</button></div>
+          <div class="card"><img src="" alt="Книга 4"><div class="card-title">Книга 4</div><button>Читать</button></div>
+          <div class="card"><img src="" alt="Книга 5"><div class="card-title">Книга 5</div><button>Читать</button></div>
+        </div>
+      </section>
+    </div>
+    <div class="ads">Реклама</div>
   </div>
   <script>
-    const data = {
-      films: {
-        subcategories: ["Фильмы", "Сериалы", "Мультсериалы", "Мультфильмы"],
-        items: {
-          "Фильмы": Array(6).fill({title: "Фильм 1", img:"https://via.placeholder.com/300x200", link: "#"}),
-          "Сериалы": [],
-          "Мультсериалы": [],
-          "Мультфильмы": []
-        }
-      },
-      comics: {
-        subcategories: ["Манга", "Манхва", "Манхуа"],
-        items: {
-          "Манга": Array(5).fill({title: "Манга 1", img:"https://via.placeholder.com/300x200", link: "#"}),
-          "Манхва": [],
-          "Манхуа": []
-        }
-      },
-      books: {
-        subcategories: ["Фэнтези", "Фантастика"],
-        items: {
-          "Фэнтези": Array(5).fill({title: "Книга 1", img:"https://via.placeholder.com/300x200", link: "#"}),
-          "Фантастика": []
-        }
-      }
-    };
-
-    let currentSection = "films";
-    let currentSubcategory = data[currentSection].subcategories[0];
-
-    const mainNavButtons = document.querySelectorAll("nav.main-nav button");
-    const subcategoryNav = document.getElementById("subcategory-nav");
-    const cardsContainer = document.getElementById("cardsContainer");
-    const searchInput = document.getElementById("searchInput");
-
-    function renderSubcategories() {
-      subcategoryNav.innerHTML = "";
-      data[currentSection].subcategories.forEach(subcat => {
-        const btn = document.createElement("button");
-        btn.textContent = subcat;
-        if(subcat === currentSubcategory) btn.classList.add("active");
-        btn.addEventListener("click", () => {
-          currentSubcategory = subcat;
-          renderSubcategories();
-          renderCards();
-        });
-        subcategoryNav.appendChild(btn);
-      });
+    function showSection(name) {
+      document.querySelector('.films').style.display = name === 'films' ? 'block' : 'none';
+      document.querySelector('.comics').style.display = name === 'comics' ? 'block' : 'none';
+      document.querySelector('.books').style.display = name === 'books' ? 'block' : 'none';
     }
-
-    function renderCards() {
-      cardsContainer.innerHTML = "";
-      const search = searchInput.value.toLowerCase();
-      const items = data[currentSection].items[currentSubcategory].filter(i => i.title.toLowerCase().includes(search));
-
-      const cols = currentSection === "films" ? 3 : 5;
-      cardsContainer.style.gridTemplateColumns = `repeat(${cols}, 1fr)`;
-
-      if (items.length === 0) {
-        cardsContainer.innerHTML = "<p>Ничего не найдено.</p>";
-        return;
-      }
-
-      items.forEach(item => {
-        const card = document.createElement("div");
-        card.className = "card";
-        card.innerHTML = `
-          <img src="${item.img}" alt="${item.title}" />
-          <div class="card-content">
-            <h3>${item.title}</h3>
-            <a href="${item.link}" target="_blank">Перейти</a>
-          </div>
-        `;
-        cardsContainer.appendChild(card);
-      });
-    }
-
-    mainNavButtons.forEach(btn => {
-      btn.addEventListener("click", () => {
-        mainNavButtons.forEach(b => b.classList.remove("active"));
-        btn.classList.add("active");
-        currentSection = btn.dataset.section;
-        currentSubcategory = data[currentSection].subcategories[0];
-        searchInput.value = "";
-        renderSubcategories();
-        renderCards();
-      });
-    });
-
-    searchInput.addEventListener("input", renderCards);
-
-    renderSubcategories();
-    renderCards();
+    showSection('films');
   </script>
 </body>
 </html>
